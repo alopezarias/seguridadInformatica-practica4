@@ -55,6 +55,10 @@ public class Fuente {
 			
 			if(i==0) {
 				bloque.append(cadena.charAt(i));
+			}else if(i == cadena.length()-1){
+				bloque.append(cadena.charAt(i));
+				mensaje.append(qtoString(this.q, bloque.toString()));
+				bloque = new StringBuilder("");
 			}else if(i%this.bloque != 0) {
 				bloque.append(cadena.charAt(i));
 			}else {
