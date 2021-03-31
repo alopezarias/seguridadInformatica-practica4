@@ -2,16 +2,20 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Esta clase se encarga de recoger los datos del ejercicio y de mostrarlos
+ * por pantalla
+ * @author angel
+ *
+ */
 public class Main {
 
 	private static Fuente fuente;
 	private static Corrector corrector;
 	private static Lineal lineal;
 	private static String mensaje;
-	
 	public static Scanner in = new Scanner(System.in);
 	
 	public static void main(String[] args) {
@@ -38,36 +42,13 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	
-//		try {
-//			lineal = new Lineal(stringAMatriz(introducirArchivo()), 2);
-//			int[][] mat = lineal.getGeneradora();
-//			System.out.println(matrizToString(mat));
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-//		int[][] mat1 = new int[2][3];
-//		int[][] mat2 = new int[3][2];
-//		int var = 1;
-//		
-//		for(int i=0; i<mat1.length; i++) {
-//			for(int j=0; j<mat1[0].length; j++) {
-//				mat1[i][j] = var++;
-//			}
-//		}
-//		var = 1;
-//		for(int i=0; i<mat2.length; i++) {
-//			for(int j=0; j<mat2[0].length; j++) {
-//				mat2[i][j] = var++;
-//			}
-//		}
-//		
-//		ArrayList<Integer> res = Corrector.multiplicarMatriz(mat1, mat2);
-//		System.out.println(res.toString());
-
 	}
 	
+	/**
+	 * Pasar una matriz a un string simple
+	 * @param mat
+	 * @return
+	 */
 	public static String matrizToString(int [][] mat) {
 		
 		StringBuilder matriz = new StringBuilder("");
@@ -82,6 +63,11 @@ public class Main {
 		return matriz.toString();
 	}
 	
+	/**
+	 * Pasar un string a una matriz
+	 * @param matriz
+	 * @return
+	 */
 	private static int[][] stringAMatriz(String matriz) {
 		
 		int[][] resultado = null;
@@ -104,6 +90,10 @@ public class Main {
 		return resultado;
 	}
 
+	/**
+	 * Cadena de bienvenida
+	 * @return
+	 */
 	private static String inicioPrograma() {
 		StringBuffer cad = new StringBuffer("");
 		cad.append("CODIFICACION BINARIA LINEAL CON RUIDO");
@@ -111,6 +101,12 @@ public class Main {
 		return cad.toString();
 	}
 	
+	/**
+	 * Metodo para recoger la ruta absoluta de un archivo con el que se trabaja
+	 * @param asunto
+	 * @return
+	 * @throws IOException
+	 */
 	private static String introducirArchivo(String asunto) throws IOException {
 		System.out.println("\nINTRODUCE LA RUTA ABSOLUTA DEL ARCHIVO (<"+asunto+">): \n");
 		String ruta = in.nextLine();
@@ -134,23 +130,31 @@ public class Main {
 		return contenido.toString();
 	}
 	
-	private static int escogerSplit() {
-		System.out.println("ESCOGE LA Q DEL CÓDIGO Q-ARIO: \n");
-		String l = in.nextLine();
-		boolean b = false;
-		while (!b) {
-			try {
-				Integer.parseInt(l);
-				b = true;
-			} catch (NumberFormatException excepcion) {
-				System.out.println("INTRODUCE UN NUMERO, POR FAVOR: \n");
-				l = in.nextLine();
-			}
-		}
-
-		return Integer.valueOf(l);
-	}
+	/**
+	 * Nos permite recoger un numero por pantalla, asegurandonos de que es un
+	 * numero lo que se introduce
+	 * @return
+	 */
+//	private static int escogerSplit() {
+//		System.out.println("ESCOGE LA Q DEL CÓDIGO Q-ARIO: \n");
+//		String l = in.nextLine();
+//		boolean b = false;
+//		while (!b) {
+//			try {
+//				Integer.parseInt(l);
+//				b = true;
+//			} catch (NumberFormatException excepcion) {
+//				System.out.println("INTRODUCE UN NUMERO, POR FAVOR: \n");
+//				l = in.nextLine();
+//			}
+//		}
+//
+//		return Integer.valueOf(l);
+//	}
 	
+	/**
+	 * Nos permite escoger entre las diferentes opciones del programa
+	 */
 	public static void opciones() {
 		imprimirMenu();
 		String menu = in.nextLine();
@@ -158,7 +162,7 @@ public class Main {
 
 		if (opc != 0) {
 			if (opc == 1) {
-				System.out.println(lineal.code(fuente.code(mensaje)));
+				//System.out.println(lineal.code(fuente.code(mensaje)));
 			}
 			else if (opc == 2) {
 				System.out.println(fuente.decode(lineal.decode(corrector.corregir(mensaje))));
@@ -172,6 +176,9 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Imprime el menu del programa por consola
+	 */
 	private static void imprimirMenu() {
 		System.out.println("------------");
 		System.out.println("MENU GENERAL");
@@ -182,6 +189,10 @@ public class Main {
 		System.out.println("-------------");
 	}
 	
+	/**
+	 * Mensaje de despedida del programa
+	 * @return
+	 */
 	private static String finPrograma() {
 		StringBuffer cad = new StringBuffer("");
 		cad.append("\n");

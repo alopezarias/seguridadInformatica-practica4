@@ -1,16 +1,28 @@
 
+/**
+ * La clase que se encarga de la codificación lineal y la decodificación
+ * @author angel
+ *
+ */
 public class Lineal {
 
-	private int q;
 	private int[][] matriz;
 	private int[][] generadora = null;
 	
+	/**
+	 * Constructor de la clase
+	 * @param matriz
+	 * @param q
+	 */
 	public Lineal(int[][] matriz, int q) {
-		this.q = q;
 		this.matriz = matriz;
 		this.generadora = calcularGeneradora(this.matriz);
 	}
 
+	/**
+	 * Para obtener la matriz generadora
+	 * @return
+	 */
 	public int[][] getGeneradora(){
 		if(this.generadora == null) {
 			this.generadora = calcularGeneradora(this.matriz);
@@ -18,12 +30,23 @@ public class Lineal {
 		return this.generadora;
 	}
 
+	/**
+	 * Aun no implementado
+	 * Para codificar un mensaje
+	 * @param code
+	 * @return
+	 */
 	@Deprecated
 	public char[] code(String code) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * Decodificación del mensaje
+	 * @param corregido
+	 * @return
+	 */
 	public String decode(String corregido) {
 		
 		StringBuilder cadena = new StringBuilder("");
@@ -41,6 +64,11 @@ public class Lineal {
 		return cadena.toString();
 	}
 	
+	/**
+	 * Calcular la matriz generadora para poder después codificar algo
+	 * @param A
+	 * @return
+	 */
 	public int[][] calcularGeneradora(int[][] A) {
 		
 		int[][] G = new int[A.length][A.length+A[0].length];

@@ -1,20 +1,39 @@
 import java.util.ArrayList;
 
+/**
+ * La clase que se encarga de la codificacion y decodificacion lineal
+ * @author angel
+ *
+ */
 public class Fuente {
 
 	private String texto;
 	private ArrayList<String> alfabeto = new ArrayList<String>();
 	private int bloque, q;
 	
+	/**
+	 * Constructor
+	 * @param texto
+	 * @param q
+	 */
 	public Fuente(String texto, int q) {
 		this.texto = texto;
 		this.q = q;
 	}
 
+	/**
+	 * Metodo que configura el alfabeto 
+	 * @param simTam
+	 */
 	public void run(int simTam) {
 		this.simbolSplit(this.texto, simTam);
 	}
 
+	/**
+	 * Separacion de los simbolos y almacenamiento
+	 * @param text
+	 * @param n
+	 */
 	private void simbolSplit(String text, int n) {
 
 		StringBuffer finalText = new StringBuffer("");
@@ -40,6 +59,10 @@ public class Fuente {
 		this.bloque = calcularBloque();
 	}
 
+	/**
+	 * Calcular el tamaño optimo de bloque para codificar
+	 * @return
+	 */
 	private int calcularBloque() {
 		double res = Math.log(this.alfabeto.size())/Math.log(this.q);
 		double round = Math.ceil(res);
@@ -47,6 +70,11 @@ public class Fuente {
 		return Integer.parseInt(redondeo.substring(0, redondeo.lastIndexOf('.')));
 	}
 
+	/**
+	 * Decodificar un mensaje ya corregido
+	 * @param cadena
+	 * @return
+	 */
 	public String decode(String cadena) {
 		
 		StringBuilder mensaje = new StringBuilder(""), bloque = new StringBuilder("");
@@ -75,11 +103,23 @@ public class Fuente {
 		return mensaje.toString();
 	}
 	
+	/**
+	 * Pasar un mensaje en qario a string legible
+	 * @param q
+	 * @param bloque
+	 * @return
+	 */
 	private String qtoString(int q, String bloque) {
 		int posicion = qToInt(q, bloque);
 		return this.alfabeto.get(posicion);
 	}
 	
+	/**
+	 * Pasar un numero qario a un integer
+	 * @param q
+	 * @param cad
+	 * @return
+	 */
 	private int qToInt(int q, String cad) {
 		
 		int resultado = 0;
@@ -94,6 +134,12 @@ public class Fuente {
 		return resultado;
 	}
 	
+	/**
+	 * Para codificar el mensaje
+	 * Aun no está implementado
+	 * @param mensaje
+	 * @return
+	 */
 	@Deprecated
 	public String code(String mensaje) {
 		// TODO Auto-generated method stub

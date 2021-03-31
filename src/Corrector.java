@@ -1,26 +1,43 @@
 import java.util.ArrayList;
 
+/**
+ * El corrector se encarga de corregir el ruido del mensaje recibido
+ * @author angel
+ *
+ */
 public class Corrector {
 
-	private int[][] H, matriz;
+	private int[][] H;
 	private ArrayList<String> tablaErrores = new ArrayList<String>();
 	private ArrayList<String> tablaSindromes = new ArrayList<String>();
 	private ArrayList<Integer> lista = new ArrayList<Integer>();
-	private int q, bloque;
+	private int bloque;
 	
-	
+	/**
+	 * Constructor de la clase
+	 * @param matriz
+	 * @param q
+	 */
 	public Corrector(int[][] matriz, int q) {
-		this.matriz = matriz;
 		this.bloque = matriz.length+matriz[0].length;
 		this.H = calcularMatrizControl(matriz, q);
-		this.q = q;
 		rellenarTablaErrores(this.bloque);
 	}
 	
+	/**
+	 * Getter de la matriz de control
+	 * @return
+	 */
 	public int[][] getMatrizControl(){
 		return this.H;
 	}
 
+	/**
+	 * Calcula la matriz de control haciendo la traspuesta y la identidad
+	 * @param matriz
+	 * @param q
+	 * @return
+	 */
 	private int[][] calcularMatrizControl(int[][] matriz, int q) {
 		
 		int filas, columnas;
@@ -48,6 +65,12 @@ public class Corrector {
 		return H;
 	}
 	
+	/**
+	 * Pasar a negativo un numero en una base
+	 * @param elemento
+	 * @param q
+	 * @return
+	 */
 	private int qNegativo(int elemento, int q) {
 		//elemento = -elemento;
 //		if(elemento == 1) {
@@ -58,6 +81,11 @@ public class Corrector {
 		return elemento%q;
 	}
 
+	/**
+	 * Metodo para corregir un mensaje entero
+	 * @param mensaje
+	 * @return
+	 */
 	public String corregir(String mensaje) {
 		
 		StringBuilder corregido = new StringBuilder("");
@@ -95,6 +123,11 @@ public class Corrector {
 		return corregido.toString();
 	}
 	
+	/**
+	 * Metodo para corregir de 15 en 15 digitos, o la long del bloque
+	 * @param cadena
+	 * @return
+	 */
 	private String corregirCadena(String cadena) {
 		ArrayList<Integer> sindrome = calcularSindrome(cadena);
 		ArrayList<Integer> error = obtenerErrorPatron(sindrome);
@@ -102,10 +135,20 @@ public class Corrector {
 		return palabra;
 	}
 
+	/**
+	 * Para calcular el sindrome de un vector
+	 * @param mensaje
+	 * @return
+	 */
 	private ArrayList<Integer> calcularSindrome(String mensaje) {
 		return multiplicarMatriz(this.H, stringToVector(mensaje));
 	}
 
+	/**
+	 * Para pasar de un string a un vector
+	 * @param cadena
+	 * @return
+	 */
 	private int[][] stringToVector(String cadena) {
 		int [][] vector = new int[cadena.length()][1];
 		
@@ -116,6 +159,12 @@ public class Corrector {
 		return vector;
 	}
 	
+	/**
+	 * Para multiplicar matrices
+	 * @param mat1
+	 * @param mat2
+	 * @return
+	 */
 	public static ArrayList<Integer> multiplicarMatriz(int[][] mat1, int[][] mat2) {
 		int resultado;
 		ArrayList<Integer> matriz = new ArrayList<Integer>();
@@ -133,6 +182,11 @@ public class Corrector {
 		return matriz;
 	}
 	
+	/**
+	 * Pasar un array a un string
+	 * @param array
+	 * @return
+	 */
 	private String arrayToString(ArrayList<Integer> array) {
 		StringBuilder cadena = new StringBuilder("");
 		for(Integer i: array) {
@@ -141,6 +195,10 @@ public class Corrector {
 		return cadena.toString();
 	}
 	
+	/**
+	 * Rellenar la tabla incompleta de sindromes
+	 * @param bloque
+	 */
 	private void rellenarTablaErrores(int bloque) {
 		int t = 2;//calcularCapacidadCorrectora(this.H);
 		for(int i=0; i<=t; i++) {
@@ -149,6 +207,11 @@ public class Corrector {
 		rellenarTablaSindromes();
 	}
 	
+	/**
+	 * Rellenar la tabla segun el peso que le pasemos
+	 * @param p
+	 * @param b
+	 */
 	private void rellenarTablaPeso(int p, int b) {
 		
 		StringBuilder error = new StringBuilder("000000000000000");
@@ -175,6 +238,9 @@ public class Corrector {
 		
 	}
 	
+	/**
+	 * Rellenar los sindromes en funcion de los errores patron
+	 */
 	private void rellenarTablaSindromes() {
 		
 		for(String s: this.tablaErrores) {
@@ -185,6 +251,11 @@ public class Corrector {
 		
 	}
 
+	/**
+	 * Obtener el error patron asociado a un sindrome de menor peso
+	 * @param sindrome
+	 * @return
+	 */
 	private ArrayList<Integer> obtenerErrorPatron(ArrayList<Integer> sindrome) {
 		
 		StringBuilder s = new StringBuilder("");
@@ -214,6 +285,12 @@ public class Corrector {
 		return null;
 	}
 	
+	/**
+	 * Corregir el error de un mensaje con su error patron
+	 * @param mensaje
+	 * @param error
+	 * @return
+	 */
 	private String corregirError(String mensaje, ArrayList<Integer> error) {
 		
 		StringBuilder cadena = new StringBuilder(mensaje);
