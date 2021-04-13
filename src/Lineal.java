@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 /**
  * La clase que se encarga de la codificación lineal y la decodificación
@@ -47,21 +48,21 @@ public class Lineal {
 	 * @param corregido
 	 * @return
 	 */
-	public String decode(String corregido) {
+	public ArrayList<Short> decode(ArrayList<Short> corregido) {
 		
-		StringBuilder cadena = new StringBuilder("");
+		ArrayList<Short> cadena = new ArrayList<Short>();
 		int bloqueCodificado = matriz.length + matriz[0].length;
 		int mensaje = matriz.length;
 		
-		for(int i=0; i<corregido.length(); i++) {
+		for(int i=0; i<corregido.size(); i++) {
 			
 			if(i == 0 || i%bloqueCodificado < mensaje) {
-				cadena.append(corregido.charAt(i));
+				cadena.add(corregido.get(i));
 			}
 			
 		}
 		
-		return cadena.toString();
+		return cadena;
 	}
 	
 	/**

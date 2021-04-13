@@ -8,10 +8,11 @@ import java.util.ArrayList;
 public class Corrector {
 
 	private int[][] H;
-	private ArrayList<String> tablaErrores = new ArrayList<String>();
-	private ArrayList<String> tablaSindromes = new ArrayList<String>();
-	private ArrayList<Integer> lista = new ArrayList<Integer>();
+	private ArrayList<ArrayList<Short>> tablaErrores = new ArrayList<ArrayList<Short>>();
+	private ArrayList<ArrayList<Integer>> tablaSindromes = new ArrayList<ArrayList<Integer>>();
+	private ArrayList<Short> lista = new ArrayList<Short>();
 	private int bloque;
+	private static short q;
 	
 	/**
 	 * Constructor de la clase
@@ -19,6 +20,7 @@ public class Corrector {
 	 * @param q
 	 */
 	public Corrector(int[][] matriz, int q) {
+		this.q = (short)q;
 		this.bloque = matriz.length+matriz[0].length;
 		this.H = calcularMatrizControl(matriz, q);
 		rellenarTablaErrores(this.bloque);
@@ -50,7 +52,7 @@ public class Corrector {
 				
 				if(j<columnas) {
 					
-					H[i][j] = qNegativo(matriz[j][i], 2);
+					H[i][j] = qNegativo(matriz[j][i], q);
 					
 				}else {
 					if(j-columnas==i)
@@ -64,38 +66,23 @@ public class Corrector {
 		
 		return H;
 	}
-	
-	/**
-	 * Pasar a negativo un numero en una base
-	 * @param elemento
-	 * @param q
-	 * @return
-	 */
-	private int qNegativo(int elemento, int q) {
-		//elemento = -elemento;
-//		if(elemento == 1) {
-//			elemento = 0;
-//		}else {
-//			elemento = 1;
-//		}
-		return elemento%q;
-	}
 
 	/**
 	 * Metodo para corregir un mensaje entero
 	 * @param mensaje
 	 * @return
 	 */
-	public String corregir(String mensaje) {
+	public ArrayList<Short> corregir(String mensaje) {
 		
-		StringBuilder corregido = new StringBuilder("");
-		StringBuilder cadena = new StringBuilder("");
+		ArrayList<Short> corregido = new ArrayList<Short>();
+		ArrayList<Short> aux = new ArrayList<Short>();
+		ArrayList<Short> cadena = new ArrayList<Short>();
 		int siguiente = 0;
 		
 		mensaje = mensaje.substring(mensaje.indexOf("[")+1, mensaje.lastIndexOf("]"));
 		String[] elementos = mensaje.split(",");
 		for(String s : elementos) {
-			lista.add(Integer.valueOf(s));
+			lista.add(Short.valueOf(s));
 		}
 		
 		siguiente = lista.size()-(lista.size()%(this.bloque));
@@ -103,24 +90,33 @@ public class Corrector {
 		for(int i=0; i<siguiente; i++) {
 			
 			if(i == 0 || i%this.bloque != 0) {
-				cadena.append(lista.get(i));
+				cadena.add(lista.get(i));
 			}else {
-				corregido.append(corregirCadena(cadena.toString()));
-				cadena = new StringBuilder("");
-				cadena.append(lista.get(i));
+				aux = corregirCadena(cadena);
+				for(Short s:aux) {
+					corregido.add(s);
+				}
+				aux = new ArrayList<Short>();
+				cadena = new ArrayList<Short>();
+				cadena.add(lista.get(i));
 			}
 			
 			if(i==siguiente-1) {
-				corregido.append(corregirCadena(cadena.toString()));
-				cadena = new StringBuilder("");
+				aux = corregirCadena(cadena);
+				for(Short s:aux) {
+					corregido.add(s);
+				}
+				aux = new ArrayList<Short>();
+				cadena = new ArrayList<Short>();
 			}
 		}
 		
 		for(int j=siguiente; j<lista.size(); j++) {
-			corregido.append(lista.get(j));
+			corregido.add(lista.get(j));
 		}
 		
-		return corregido.toString();
+		System.out.println(corregido.toString());
+		return corregido;
 	}
 	
 	/**
@@ -128,10 +124,10 @@ public class Corrector {
 	 * @param cadena
 	 * @return
 	 */
-	private String corregirCadena(String cadena) {
+	private ArrayList<Short> corregirCadena(ArrayList<Short> cadena) {
 		ArrayList<Integer> sindrome = calcularSindrome(cadena);
-		ArrayList<Integer> error = obtenerErrorPatron(sindrome);
-		String palabra = corregirError(cadena, error);
+		ArrayList<Short> error = obtenerErrorPatron(sindrome);
+		ArrayList<Short> palabra = corregirError(cadena, error);
 		return palabra;
 	}
 
@@ -140,8 +136,8 @@ public class Corrector {
 	 * @param mensaje
 	 * @return
 	 */
-	private ArrayList<Integer> calcularSindrome(String mensaje) {
-		return multiplicarMatriz(this.H, stringToVector(mensaje));
+	private ArrayList<Integer> calcularSindrome(ArrayList<Short> mensaje) {
+		return multiplicarMatriz(this.H, arrayToVector(mensaje));
 	}
 
 	/**
@@ -156,6 +152,15 @@ public class Corrector {
 			vector[i][0] = Integer.valueOf(cadena.charAt(i));
 		}
 		
+		return vector;
+	}
+	
+	private int[][] arrayToVector(ArrayList<Short> array){
+		int[][] vector = new int[array.size()][1];
+		
+		for(int i=0; i<array.size(); i++) {
+			vector[i][0] = (int) array.get(i);
+		}
 		return vector;
 	}
 	
@@ -175,7 +180,7 @@ public class Corrector {
 				for(int j=0; j<mat2.length; j++) {
 					resultado += mat1[i][j] * mat2[j][k];
 				}
-				matriz.add(resultado%2);
+				matriz.add(resultado%q);
 				resultado = 0;
 			}
 		}
@@ -212,30 +217,42 @@ public class Corrector {
 	 * @param p
 	 * @param b
 	 */
+	@SuppressWarnings("unchecked")
 	private void rellenarTablaPeso(int p, int b) {
 		
-		StringBuilder error = new StringBuilder("000000000000000");
+		ArrayList<Short> error = new ArrayList<Short>();
+		ArrayList<Short> e;
+		
+		for(int a=0; a<b; a++) {
+			error.add((short) 0);
+		}
+		
+		e = (ArrayList<Short>) error.clone();
 		
 		if(p == 0) {
-			this.tablaErrores.add(error.toString());
+			this.tablaErrores.add(e);
 		}else if(p==1){
 			for(int i=0; i<b; i++) {
-				error.setCharAt(i, '1');
-				this.tablaErrores.add(error.toString());
-				error = new StringBuilder("000000000000000");
+				for(short j=1; j<q; j++) {
+					e.set(i, j);
+					this.tablaErrores.add(e);
+					e = (ArrayList<Short>) error.clone();
+				}
 			}
 		}else if(p==2) {
 			for(int i=0; i<b-1; i++) {
 				for(int j=i+1; j<b; j++) {
-					error.setCharAt(i, '1');
-					error.setCharAt(j, '1');
-					this.tablaErrores.add(error.toString());
-					error = new StringBuilder("000000000000000");
+					for(short n=1; n<q; n++) {
+						for(short m=1; m<q; m++) {
+							e.set(i, n);
+							e.set(j, m);
+							this.tablaErrores.add(e);
+							e = (ArrayList<Short>) error.clone();
+						}
+					}
 				}
 			}
-			
 		}
-		
 	}
 	
 	/**
@@ -243,9 +260,9 @@ public class Corrector {
 	 */
 	private void rellenarTablaSindromes() {
 		
-		for(String s: this.tablaErrores) {
-			ArrayList<Integer> sindrome = multiplicarMatriz(this.H, stringToVector(s));
-			this.tablaSindromes.add(arrayToString(sindrome));
+		for(ArrayList<Short> s: this.tablaErrores) {
+			ArrayList<Integer> sindrome = multiplicarMatriz(this.H, arrayToVector(s));
+			this.tablaSindromes.add(sindrome);
 		}
 		
 		
@@ -256,31 +273,26 @@ public class Corrector {
 	 * @param sindrome
 	 * @return
 	 */
-	private ArrayList<Integer> obtenerErrorPatron(ArrayList<Integer> sindrome) {
+	private ArrayList<Short> obtenerErrorPatron(ArrayList<Integer> sindrome) {
 		
-		StringBuilder s = new StringBuilder("");
 		int indice = -1;
-		for(Integer i:sindrome) {
-			s.append(i);
-		}
-		String sindromeABuscar = s.toString();
-		for(String sind : this.tablaSindromes) {
-			if(sind.compareTo(sindromeABuscar) == 0) {
-				indice = this.tablaSindromes.indexOf(sind);
+		int indice_aux = 0;
+		boolean encontrado = true;
+
+		for(int i=0; i<tablaSindromes.size(); i++) {
+			if(tablaSindromes.get(i).equals(sindrome)) {
+				indice = i;
 				break;
 			}
 		}
+		
 		try {
-		String error = this.tablaErrores.get(indice);
-		ArrayList<Integer> Error = new ArrayList<Integer>();
+			
+			ArrayList<Short> error = this.tablaErrores.get(indice);
+			return error;
 		
-		for(int i=0; i<error.length(); i++) {
-			Error.add(Integer.valueOf(String.valueOf(error.charAt(i))));
-		}
-		
-		return Error;
 		}catch(Exception e) {
-			System.out.println("Se está buscando el síndrome --> " + s.toString());
+			System.out.println("Se está buscando el síndrome --> " + sindrome.toString());
 		}
 		return null;
 	}
@@ -291,19 +303,42 @@ public class Corrector {
 	 * @param error
 	 * @return
 	 */
-	private String corregirError(String mensaje, ArrayList<Integer> error) {
+	private ArrayList<Short> corregirError(ArrayList<Short> mensaje, ArrayList<Short> error) {
 		
-		StringBuilder cadena = new StringBuilder(mensaje);
-		
-		for(int i=0; i<mensaje.length(); i++) {
-			if(error.get(i) == 1) {
-				if(cadena.charAt(i) == '0')
-					cadena.setCharAt(i, '1');
-				else if(cadena.charAt(i) == '1')
-					cadena.setCharAt(i, '0');
+		//System.out.println(mensaje.size() + " - " + error.size());
+		for(int i=0; i<mensaje.size(); i++) {
+			
+			if(error.get(i) != 0) {
+				mensaje.set(i, restarAB(mensaje.get(i),error.get(i)));
 			}
 		}
 		
-		return cadena.toString();
+		return mensaje;
+	}
+	
+	private Short restarAB(short a, short b) {
+		
+		int resultado = (int)a - (int)b;
+		while(resultado<0) {
+			resultado += q;
+		}
+		return (short)(resultado%q);
+	}
+	
+	/**
+	 * Pasar a negativo un numero en una base
+	 * @param elemento
+	 * @param q
+	 * @return
+	 */
+	private int qNegativo(int elemento, int q) {
+		
+		int valor = -elemento;
+		
+		while(valor<0) {
+			valor +=q;
+		}
+		
+		return valor;
 	}
 }

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * La clase que se encarga de la codificacion y decodificacion lineal
@@ -75,24 +76,25 @@ public class Fuente {
 	 * @param cadena
 	 * @return
 	 */
-	public String decode(String cadena) {
+	public String decode(ArrayList<Short> cadena) {
 		
-		StringBuilder mensaje = new StringBuilder(""), bloque = new StringBuilder("");
+		StringBuilder mensaje = new StringBuilder("");
+		ArrayList<Short> bloque = new ArrayList<Short>();
 		
-		for(int i=0; i<cadena.length(); i++) {
+		for(int i=0; i<cadena.size(); i++) {
 			
 			if(i==0) {
-				bloque.append(cadena.charAt(i));
-			}else if(i == cadena.length()-1){
-				bloque.append(cadena.charAt(i));
-				mensaje.append(qtoString(this.q, bloque.toString()));
-				bloque = new StringBuilder("");
+				bloque.add(cadena.get(i));
+			}else if(i == cadena.size()-1){
+				bloque.add(cadena.get(i));
+				mensaje.append(qtoString(this.q, bloque));
+				bloque = new ArrayList<Short>();
 			}else if(i%this.bloque != 0) {
-				bloque.append(cadena.charAt(i));
+				bloque.add(cadena.get(i));
 			}else {
-				mensaje.append(qtoString(this.q, bloque.toString()));
-				bloque = new StringBuilder("");
-				bloque.append(cadena.charAt(i));
+				mensaje.append(qtoString(this.q, bloque));
+				bloque = new ArrayList<Short>();
+				bloque.add(cadena.get(i));
 			}			
 		}
 		
@@ -109,7 +111,7 @@ public class Fuente {
 	 * @param bloque
 	 * @return
 	 */
-	private String qtoString(int q, String bloque) {
+	private String qtoString(int q, ArrayList<Short> bloque) {
 		int posicion = qToInt(q, bloque);
 		return this.alfabeto.get(posicion);
 	}
@@ -119,20 +121,21 @@ public class Fuente {
 	 * @param q
 	 * @param cad
 	 * @return
-	 */
-	private int qToInt(int q, String cad) {
+	 */	
+	private int qToInt(int q, ArrayList<Short> array) {
 		
 		int resultado = 0;
-		StringBuilder cadena = new StringBuilder(cad);
-		cadena.reverse();
 		
-		for(int i=0; i<cadena.length(); i++) {
-			if(cadena.charAt(i) == '1') {
-				resultado += Math.pow(q, i);
-			}
+		Collections.reverse(array);
+		
+		for(int i=array.size()-1; i>=0; i--) {
+			resultado += Math.pow(q, i) * Integer.valueOf(array.get(i));
 		}
+
 		return resultado;
+		
 	}
+	
 	
 	/**
 	 * Para codificar el mensaje

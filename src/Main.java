@@ -30,7 +30,7 @@ public class Main {
 			matriz = introducirArchivo("Matriz");
 			mat = stringAMatriz(matriz);
 			mensaje = introducirArchivo("Mensaje");
-			q = 2;//escogerSplit();
+			q = 7;//escogerSplit("Q-ario");
 			fuente = new Fuente(texto, q);
 			lineal = new Lineal(mat, q);
 			corrector = new Corrector(mat, q);
@@ -135,22 +135,22 @@ public class Main {
 	 * numero lo que se introduce
 	 * @return
 	 */
-//	private static int escogerSplit() {
-//		System.out.println("ESCOGE LA Q DEL CÓDIGO Q-ARIO: \n");
-//		String l = in.nextLine();
-//		boolean b = false;
-//		while (!b) {
-//			try {
-//				Integer.parseInt(l);
-//				b = true;
-//			} catch (NumberFormatException excepcion) {
-//				System.out.println("INTRODUCE UN NUMERO, POR FAVOR: \n");
-//				l = in.nextLine();
-//			}
-//		}
-//
-//		return Integer.valueOf(l);
-//	}
+	private static int escogerSplit() {
+		System.out.println("ESCOGE LA Q DEL CÓDIGO Q-ARIO: \n");
+		String l = in.nextLine();
+		boolean b = false;
+		while (!b) {
+			try {
+				Integer.parseInt(l);
+				b = true;
+			} catch (NumberFormatException excepcion) {
+				System.out.println("INTRODUCE UN NUMERO, POR FAVOR: \n");
+				l = in.nextLine();
+			}
+		}
+
+		return Integer.valueOf(l);
+	}
 	
 	/**
 	 * Nos permite escoger entre las diferentes opciones del programa
