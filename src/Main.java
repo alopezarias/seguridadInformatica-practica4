@@ -17,6 +17,7 @@ public class Main {
 	private static Lineal lineal;
 	private static String mensaje;
 	public static Scanner in = new Scanner(System.in);
+	private static String data;
 	
 	public static void main(String[] args) {
 		
@@ -25,23 +26,42 @@ public class Main {
 		int[][] mat;
 		int q;
 		try {
-			texto = introducirArchivo("Fuente");
-			texto = texto.substring(texto.indexOf("\"") + 1, texto.lastIndexOf("\""));
-			matriz = introducirArchivo("Matriz");
+			introducirArchivo("resources/data");
+			texto = seleccionarDelArchivo("alfabeto");//introducirArchivo("Fuente");
+			//texto = texto.substring(texto.indexOf("\"") + 1, texto.lastIndexOf("\""));
+			matriz = seleccionarDelArchivo("matriz");//introducirArchivo("Matriz");
 			mat = stringAMatriz(matriz);
-			mensaje = introducirArchivo("Mensaje");
-			q = 7;//escogerSplit("Q-ario");
+			mensaje = seleccionarDelArchivo("mensaje");//introducirArchivo("Mensaje");
+			q = Integer.valueOf(seleccionarDelArchivo("q"));//7;//escogerSplit("Q-ario");
 			fuente = new Fuente(texto, q);
 			lineal = new Lineal(mat, q);
 			corrector = new Corrector(mat, q);
 			int n = 1;//escogerSplit();
 			fuente.run(n);
-			System.out.println(matrizToString(corrector.getMatrizControl()));
+			//System.out.println(matrizToString(corrector.getMatrizControl()));
 			opciones();
 			System.out.println(finPrograma());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	
+	}
+	
+	public static String seleccionarDelArchivo(String id) {
+
+		switch (id) {
+		case "alfabeto":
+			return data.substring(data.indexOf("\"") + 1, data.indexOf("\"", data.indexOf("\"") + 1));
+		case "q":
+			return data.substring(data.indexOf("p=") + 2, data.indexOf("\n", data.indexOf("p=") + 1));
+		case "mensaje":
+			return data.substring(data.indexOf("lista=[") + 7, data.lastIndexOf("]"));
+		case "matriz":
+			return data.substring(data.indexOf("{") + 1, data.indexOf("}"));
+		case "d":
+			return data.substring(data.indexOf("d=") + 2, data.indexOf("\n", data.indexOf("d=") + 1));
+		default:
+			return null;
+		}
 	}
 	
 	/**
@@ -73,8 +93,8 @@ public class Main {
 		int[][] resultado = null;
 		String fila;
 		String[] columnas;
-		String mat = matriz.substring(matriz.indexOf("{")+1, matriz.lastIndexOf("}"));
-		String[] filas = mat.split(";");
+		//String mat = matriz.substring(matriz.indexOf("{")+1, matriz.lastIndexOf("}"));
+		String[] filas = matriz.split(";");
 		for(int i=0; i<filas.length; i++) {
 			fila = filas[i].substring(filas[i].indexOf("[")+1, filas[i].lastIndexOf("]"));
 			columnas = fila.split(",");
@@ -102,16 +122,17 @@ public class Main {
 	}
 	
 	/**
-	 * Metodo para recoger la ruta absoluta de un archivo con el que se trabaja
-	 * @param asunto
-	 * @return
+	 * Metodo para introducir la ruta del archivo y capturar el texto del mismo
+	 * 
+	 * @return texto contenido en el archivo
 	 * @throws IOException
 	 */
-	private static String introducirArchivo(String asunto) throws IOException {
-		System.out.println("\nINTRODUCE LA RUTA ABSOLUTA DEL ARCHIVO (<"+asunto+">): \n");
-		String ruta = in.nextLine();
+	private static void introducirArchivo(String ruta) throws IOException {
+		System.out.println("\nINTRODUCE LA RUTA ABSOLUTA DEL ARCHIVO CON EL TEXTO:\n");
+		// String ruta = "../resources/data";//in.nextLine();
 		String linea;
 		StringBuffer contenido = new StringBuffer("");
+		//String texto;
 
 		try {
 			FileReader f = new FileReader(ruta, StandardCharsets.UTF_8);
@@ -127,7 +148,7 @@ public class Main {
 			throw e;
 		}
 
-		return contenido.toString();
+		data = contenido.toString();
 	}
 	
 	/**
@@ -135,22 +156,22 @@ public class Main {
 	 * numero lo que se introduce
 	 * @return
 	 */
-	private static int escogerSplit() {
-		System.out.println("ESCOGE LA Q DEL CÓDIGO Q-ARIO: \n");
-		String l = in.nextLine();
-		boolean b = false;
-		while (!b) {
-			try {
-				Integer.parseInt(l);
-				b = true;
-			} catch (NumberFormatException excepcion) {
-				System.out.println("INTRODUCE UN NUMERO, POR FAVOR: \n");
-				l = in.nextLine();
-			}
-		}
-
-		return Integer.valueOf(l);
-	}
+//	private static int escogerSplit() {
+//		System.out.println("ESCOGE LA Q DEL CÓDIGO Q-ARIO: \n");
+//		String l = in.nextLine();
+//		boolean b = false;
+//		while (!b) {
+//			try {
+//				Integer.parseInt(l);
+//				b = true;
+//			} catch (NumberFormatException excepcion) {
+//				System.out.println("INTRODUCE UN NUMERO, POR FAVOR: \n");
+//				l = in.nextLine();
+//			}
+//		}
+//
+//		return Integer.valueOf(l);
+//	}
 	
 	/**
 	 * Nos permite escoger entre las diferentes opciones del programa

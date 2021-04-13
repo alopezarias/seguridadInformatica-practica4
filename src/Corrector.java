@@ -20,7 +20,7 @@ public class Corrector {
 	 * @param q
 	 */
 	public Corrector(int[][] matriz, int q) {
-		this.q = (short)q;
+		q = (short)q;
 		this.bloque = matriz.length+matriz[0].length;
 		this.H = calcularMatrizControl(matriz, q);
 		rellenarTablaErrores(this.bloque);
@@ -79,7 +79,7 @@ public class Corrector {
 		ArrayList<Short> cadena = new ArrayList<Short>();
 		int siguiente = 0;
 		
-		mensaje = mensaje.substring(mensaje.indexOf("[")+1, mensaje.lastIndexOf("]"));
+		//mensaje = mensaje.substring(mensaje.indexOf("[")+1, mensaje.lastIndexOf("]"));
 		String[] elementos = mensaje.split(",");
 		for(String s : elementos) {
 			lista.add(Short.valueOf(s));
@@ -115,7 +115,7 @@ public class Corrector {
 			corregido.add(lista.get(j));
 		}
 		
-		System.out.println(corregido.toString());
+		//System.out.println(corregido.toString());
 		return corregido;
 	}
 	
@@ -145,15 +145,15 @@ public class Corrector {
 	 * @param cadena
 	 * @return
 	 */
-	private int[][] stringToVector(String cadena) {
-		int [][] vector = new int[cadena.length()][1];
-		
-		for(int i=0; i<cadena.length(); i++) {
-			vector[i][0] = Integer.valueOf(cadena.charAt(i));
-		}
-		
-		return vector;
-	}
+//	private int[][] stringToVector(String cadena) {
+//		int [][] vector = new int[cadena.length()][1];
+//		
+//		for(int i=0; i<cadena.length(); i++) {
+//			vector[i][0] = Integer.valueOf(cadena.charAt(i));
+//		}
+//		
+//		return vector;
+//	}
 	
 	private int[][] arrayToVector(ArrayList<Short> array){
 		int[][] vector = new int[array.size()][1];
@@ -192,13 +192,13 @@ public class Corrector {
 	 * @param array
 	 * @return
 	 */
-	private String arrayToString(ArrayList<Integer> array) {
-		StringBuilder cadena = new StringBuilder("");
-		for(Integer i: array) {
-			cadena.append(i);
-		}
-		return cadena.toString();
-	}
+//	private String arrayToString(ArrayList<Integer> array) {
+//		StringBuilder cadena = new StringBuilder("");
+//		for(Integer i: array) {
+//			cadena.append(i);
+//		}
+//		return cadena.toString();
+//	}
 	
 	/**
 	 * Rellenar la tabla incompleta de sindromes
@@ -276,8 +276,8 @@ public class Corrector {
 	private ArrayList<Short> obtenerErrorPatron(ArrayList<Integer> sindrome) {
 		
 		int indice = -1;
-		int indice_aux = 0;
-		boolean encontrado = true;
+		//int indice_aux = 0;
+		//boolean encontrado = true;
 
 		for(int i=0; i<tablaSindromes.size(); i++) {
 			if(tablaSindromes.get(i).equals(sindrome)) {
