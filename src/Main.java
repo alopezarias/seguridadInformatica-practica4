@@ -44,6 +44,8 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	
+		
+		//System.out.println(Fuente.intToQ(11, 126).toString());
 	}
 	
 	public static String seleccionarDelArchivo(String id) {

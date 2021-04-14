@@ -136,6 +136,26 @@ public class Fuente {
 		
 	}
 	
+	/**
+	 * Pasar un numero int a un qario
+	 * @param q
+	 * @param num
+	 * @return
+	 */	
+	public static ArrayList<Short> intToQ(int q, int num) {
+		
+		ArrayList<Short> enBase = new ArrayList<Short>();
+		int res;
+		while(num!=1) {
+			res = num%q;
+			enBase.add((short)res);
+			num = (num-res)/q;
+		}
+		enBase.add((short)num);
+		Collections.reverse(enBase);
+		return enBase;
+		
+	}
 	
 	/**
 	 * Para codificar el mensaje

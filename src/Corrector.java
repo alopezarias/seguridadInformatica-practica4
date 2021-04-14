@@ -19,8 +19,8 @@ public class Corrector {
 	 * @param matriz
 	 * @param q
 	 */
-	public Corrector(int[][] matriz, int q) {
-		q = (short)q;
+	public Corrector(int[][] matriz, int q_ario) {
+		q = (short)q_ario;
 		this.bloque = matriz.length+matriz[0].length;
 		this.H = calcularMatrizControl(matriz, q);
 		rellenarTablaErrores(this.bloque);
@@ -137,7 +137,7 @@ public class Corrector {
 	 * @return
 	 */
 	private ArrayList<Integer> calcularSindrome(ArrayList<Short> mensaje) {
-		return multiplicarMatriz(this.H, arrayToVector(mensaje));
+		return multiplicarMatriz(this.H, arrayToVector(mensaje), q);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class Corrector {
 	 * @param mat2
 	 * @return
 	 */
-	public static ArrayList<Integer> multiplicarMatriz(int[][] mat1, int[][] mat2) {
+	public static ArrayList<Integer> multiplicarMatriz(int[][] mat1, int[][] mat2, short q) {
 		int resultado;
 		ArrayList<Integer> matriz = new ArrayList<Integer>();
 		
@@ -180,7 +180,10 @@ public class Corrector {
 				for(int j=0; j<mat2.length; j++) {
 					resultado += mat1[i][j] * mat2[j][k];
 				}
-				matriz.add(resultado%q);
+				if(resultado>q)
+					matriz.add(resultado%q);
+				else
+					matriz.add(resultado);
 				resultado = 0;
 			}
 		}
@@ -261,7 +264,7 @@ public class Corrector {
 	private void rellenarTablaSindromes() {
 		
 		for(ArrayList<Short> s: this.tablaErrores) {
-			ArrayList<Integer> sindrome = multiplicarMatriz(this.H, arrayToVector(s));
+			ArrayList<Integer> sindrome = multiplicarMatriz(this.H, arrayToVector(s), q);
 			this.tablaSindromes.add(sindrome);
 		}
 		
