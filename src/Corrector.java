@@ -180,7 +180,7 @@ public class Corrector {
 				for(int j=0; j<mat2.length; j++) {
 					resultado += mat1[i][j] * mat2[j][k];
 				}
-				if(resultado>q)
+				if(resultado>=q)
 					matriz.add(resultado%q);
 				else
 					matriz.add(resultado);
